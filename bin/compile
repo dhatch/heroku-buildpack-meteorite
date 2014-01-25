@@ -63,22 +63,33 @@ function package_download() {
 
 echo "-----> Resolving engine versions"
 
-#TODO: Fix package.json loading
-#if [ -f "${BUILD_DIR}/package.json" ]; then
-#  requested_node_ver=$(cat $BUILD_DIR/package.json | $LP_DIR/vendor/jq -r .engines.node)
-#fi
-requested_node_ver=""
-# add a warning if no version of node specified
-if [ "${requested_node_ver}" == "" ]; then
-  requested_node_ver="stable"
-  echo
-  echo "No version of Node.js specified in package.json, using latest stable, see:" | indent
-  echo "https://devcenter.heroku.com/articles/nodejs-versions" | indent
-  echo
+# Resolve node version from package.json
+
+# Source: https://github.com/heroku/heroku-buildpack-nodejs/blob/master/bin/compile
+
+# Look in package.json's engines.node field for a semver range
+semver_range=$(cat $BUILD_DIR/package.json | $LP_DIR/vendor/jq -r .engines.node)
+
+# Resolve node version using semver.io
+node_version=$(curl --silent --get --data-urlencode "range=${semver_range}" https://semver.io/node/resolve)
+
+# Recommend using semver ranges in a safe manner
+if [ "$semver_range" == "null" ]; then
+  echo "You can specify a node version in package.json" | indent
+  semver_range=""
+elif [ "$semver_range" == "*" ]; then
+  echo "Avoid using semver ranges like '*' in engines.node" | indent
+elif [ ${semver_range:0:1} == ">" ]; then
+  echo "Avoid using semver ranges starting with '>' in engines.node" | indent
 fi
 
-NODE_VERSION=$(curl --silent --get --data-urlencode "range=${requested_node_ver}" https://semver.io/node/resolve)
-echo "Using Node.js version: ${NODE_VERSION}" | indent
+# Output info about requested range and resolved node version
+if [ "$semver_range" == "" ]; then
+  echo "Defaulting to latest stable node: $node_version" | indent
+else
+  echo "Requested node range:  $semver_range" | indent
+  echo "Resolved node version: $node_version" | indent
+fi
 
 # vendor directories
 VENDORED_NODE="$(mktmpdir node)"
