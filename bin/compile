@@ -97,7 +97,7 @@ VENDORED_MODULES="$(mktmpdir modules)"
 
 # download and unpack packages
 echo "-----> Fetching Node.js binaries"
-package_download "node" "${NODE_VERSION}" "${VENDORED_NODE}"
+package_download "node" "${node_version}" "${VENDORED_NODE}"
 
 # setting up paths for building
 PATH="$VENDORED_NODE/bin:$VENDORED_MODULES/bin:$PATH"
