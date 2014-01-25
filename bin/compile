@@ -110,7 +110,7 @@ mkdir -p "$HOME"
 # Determine METEOR_RELEASE
 echo '-------------------'
 ls $BUILDDIR | indent
-cat $BUILDDIR/meteor.release
+cat "$BUILDDIR/meteor.release"
 echo '--------------------'
 if [[ -f $BUILDDIR/meteor.release ]]; then
   METEOR_RELEASE="--release $(cat $BUILDDIR/meteor.release)"
