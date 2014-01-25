@@ -106,6 +106,16 @@ echo "Meteorite installed" | indent
 
 METEOR_BUILD_DIR="$BUILD_DIR/.meteor/heroku_build"
 mkdir -p "$HOME"
+
+# Determine METEOR_RELEASE
+
+if [[ -f $BUILDDIR/meteor.release ]]; then
+  METEOR_RELEASE = "--release $(cat $BUILDDIR/meteor.release)"
+else
+  echo "Meteor release not specified in meteor.release file.  Using default." | indent
+  METEOR_RELEASE = ''
+fi
+
 ############################################
 # install meteor + packages through mrt
 # bundle, and install into app/
@@ -121,7 +131,7 @@ echo "Meteor installed" | indent
 echo "Installing packages" | indent
 HOME="$BUILD_DIR" mrt install | indent
 echo "Building meteor bundle" | indent
-HOME="$VENDORED_METEOR" "$VENDORED_METEOR"/.meteor/meteor bundle "$CACHE_DIR"/bundle.tar.gz 2>&1 | indent
+HOME="$VENDORED_METEOR" "$VENDORED_METEOR"/.meteor/meteor bundle $METEOR_RELEASE "$CACHE_DIR"/bundle.tar.gz 2>&1 | indent
 
 mkdir -p "$METEOR_BUILD_DIR"/app
 tar -zxf "$CACHE_DIR"/bundle.tar.gz --strip-components 1 -C "$METEOR_BUILD_DIR"/app
