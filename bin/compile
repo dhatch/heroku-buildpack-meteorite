@@ -107,11 +107,6 @@ echo "Meteorite installed" | indent
 METEOR_BUILD_DIR="$BUILD_DIR/.meteor/heroku_build"
 mkdir -p "$HOME"
 
-# Determine METEOR_RELEASE
-echo '-------------------'
-ls $BUILD_DIR | indent
-cat "$BUILD_DIR/meteor.release"
-echo '--------------------'
 if [[ -f $BUILD_DIR/meteor.release ]]; then
   METEOR_RELEASE="--release $(cat $BUILD_DIR/meteor.release)"
   echo "Using meteor release $METEOR_RELEASE"
