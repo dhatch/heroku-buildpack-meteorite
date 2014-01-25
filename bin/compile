@@ -109,11 +109,11 @@ mkdir -p "$HOME"
 
 # Determine METEOR_RELEASE
 echo '-------------------'
-ls $BUILDDIR | indent
-cat "$BUILDDIR/meteor.release"
+ls $BUILD_DIR | indent
+cat "$BUILD_DIR/meteor.release"
 echo '--------------------'
-if [[ -f $BUILDDIR/meteor.release ]]; then
-  METEOR_RELEASE="--release $(cat $BUILDDIR/meteor.release)"
+if [[ -f $BUILD_DIR/meteor.release ]]; then
+  METEOR_RELEASE="--release $(cat $BUILD_DIR/meteor.release)"
   echo "Using meteor release $METEOR_RELEASE"
 else
   echo "Meteor release not specified in meteor.release file.  Using default." | indent
