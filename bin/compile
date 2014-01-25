@@ -108,7 +108,9 @@ METEOR_BUILD_DIR="$BUILD_DIR/.meteor/heroku_build"
 mkdir -p "$HOME"
 
 # Determine METEOR_RELEASE
-
+echo '-------------------'
+ls $BUILDDIR | indent
+echo '--------------------'
 if [[ -f $BUILDDIR/meteor.release ]]; then
   METEOR_RELEASE="--release $(cat $BUILDDIR/meteor.release)"
   echo "Using meteor release $METEOR_RELEASE"
