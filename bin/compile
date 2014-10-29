@@ -148,7 +148,7 @@ tar -zxf "$CACHE_DIR"/bundle.tar.gz --strip-components 1 -C "$METEOR_BUILD_DIR"/
 rm "$CACHE_DIR"/bundle.tar.gz
 
 echo "Installing npm packages" | indent
-cd $METEOR_BUILD_DIR/programs/server
+cd $METEOR_BUILD_DIR/app/programs/server
 HOME="$BUILD_DIR" $VENDORED_NODE/bin/node $VENDORED_NODE/bin/npm install 2>&1 | indent
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
